@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface VideoService {
-    int late_standard = 2;
+    int late_standard = 1;
 
     void insertVideo(Video video);
 

@@ -50,7 +50,10 @@ public class UserServiceImpl implements UserService {
 
         @Override
         public int compare(User arg0, User arg1) {
-            return arg0.getRent_fee() > arg1.getRent_fee() ? -1 : arg0.getRent_fee() < arg1.getRent_fee() ? 1:0;
+            int value1 = arg0.getRent_fee() + arg0.getLate_fee();
+            int value2 = arg1.getRent_fee() + arg1.getLate_fee();
+
+            return value1 > value2 ? -1 : value1 < value2 ? 1:0;
         }
 
     }

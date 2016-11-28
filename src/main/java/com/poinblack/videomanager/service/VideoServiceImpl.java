@@ -83,9 +83,12 @@ public class VideoServiceImpl implements VideoService {
 
     public Map<String, Object> returnVideo(int video_id, String user_id,int rentInfo_id) {
         Video video = videoDao.selectByVideo(video_id);
+        RentInfo rentInfo = rentInfoDao.selectByRentInfo(rentInfo_id);
 
+        rentInfo.setState(env.getProperty("state.idle"));
         video.setState(env.getProperty("state.idle"));
 
+        rentInfoDao.updateRentInfo(rentInfo);
         videoDao.updateVideo(video);
         return saveCashBook(user_id,video_id,rentInfo_id);
     }
@@ -124,9 +127,18 @@ public class VideoServiceImpl implements VideoService {
 
     private Map<String,Object> saveCashBook(String user_id, int video_id,int rentInfo_id){
 
-        CashBook cashBook= buildCashBook(user_id,video_id,rentInfo_id);
+        CashBook cashBook = cashBookDao.selectByRentInfo(rentInfo_id);
 
-        cashBookDao.insertCashBook(cashBook);
+        if(cashBook == null){
+            System.out.println("buildCashBook");
+            cashBook = buildCashBook(user_id,video_id,rentInfo_id);
+            cashBookDao.insertCashBook(cashBook);
+        }
+        else{
+            cashBook.setLate_fee(lateFeeCal(cashBook.getRentInfo() , cashBook.getVideo()));
+            cashBookDao.updateCashBook(cashBook);
+        }
+
 
         //view 꾸미기용
         Map<String,Object> map = new HashMap<>();
@@ -163,6 +175,19 @@ public class VideoServiceImpl implements VideoService {
         User user = userDao.selectByUser(user_id);
         RentInfo rentInfo = rentInfoDao.selectByRentInfo(rentInfo_id);
 
+        int lateFee = lateFeeCal(rentInfo,video);
+
+        cashBook.setUser(user);
+        cashBook.setVideo(video);
+        cashBook.setRentInfo(rentInfo);
+        cashBook.setRent_fee(video.getRent_fee());
+        cashBook.setLate_fee(lateFee);
+        cashBook.setTotal(video.getRent_fee() + lateFee);
+
+        return cashBook;
+    }
+
+    private int lateFeeCal(RentInfo rentInfo , Video video){
         //Todo hibernate 활용방법 구현 시 변경
         int lateDate = (int) doDiffOfDate(rentInfo);
 
@@ -171,29 +196,24 @@ public class VideoServiceImpl implements VideoService {
         if(lateDate > late_standard){
             lateFee = video.getLate_fee()*(lateDate-late_standard);
         }
-
-        cashBook.setUser(user);
-        cashBook.setVideo(video);
-        cashBook.setRent_fee(video.getRent_fee());
-        cashBook.setLate_fee(lateFee);
-        cashBook.setTotal(video.getRent_fee() + lateFee);
-
-        return cashBook;
+        return lateFee;
     }
     //Todo hibernate 활용방법 구현 시 변경 혹은 삭제
     public long doDiffOfDate(RentInfo rentInfo){
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            Date beginDate =formatter.parse(String.valueOf(rentInfo.getRent_date()));
+            Date beginDate =rentInfo.getRent_date();
             Date endDate = new Date();
 
             // 시간차이를 시간,분,초를 곱한 값으로 나누면 하루 단위가 나옴
             long diff = endDate.getTime() - beginDate.getTime();
             long diffDays = diff / (24 * 60 * 60 * 1000);
 
+            System.out.println("diffDays : "+diffDays);
+
             return diffDays;
 
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;
