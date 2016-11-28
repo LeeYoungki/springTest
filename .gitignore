@@ -2,3 +2,5 @@
 /.idea
 /node_modules
 /src/main/webapp
+VideoManager.iml
+lib/
