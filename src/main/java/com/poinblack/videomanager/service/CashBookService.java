@@ -9,9 +9,9 @@ public interface CashBookService {
 
     List<CashBook> selectAllCashBook();
 
-    void deleteByCashBookId(String cb_id);
+    void deleteByCashBookId(int cb_id);
 
-    CashBook selectByCashBookId(String cb_id);
+    CashBook selectByCashBookId(int cb_id);
 
     void updateCashBook(CashBook cashBook);
 }

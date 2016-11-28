@@ -23,11 +23,11 @@ public class CashBookServiceImpl implements CashBookService {
         return dao.selectAllCashBook();
     }
 
-    public void deleteByCashBookId(String cb_id) {
+    public void deleteByCashBookId(int cb_id) {
         dao.deleteCashBook(cb_id);
     }
 
-    public CashBook selectByCashBookId(String cb_id) {
+    public CashBook selectByCashBookId(int cb_id) {
         return dao.selectByCashBook(cb_id);
     }
 

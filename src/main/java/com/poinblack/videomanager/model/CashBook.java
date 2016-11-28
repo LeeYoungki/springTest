@@ -27,6 +27,10 @@ public class CashBook {
     @JoinColumn(name = "cb_video_id" )
     private Video video;
 
+    @OneToOne
+    @JoinColumn(name = "cb_rent_id")
+    private RentInfo rentInfo;
+
     @Column(nullable = false)
     private int rent_fee;
 

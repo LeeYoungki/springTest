@@ -11,9 +11,11 @@ public interface CashBookDao {
 
     List<CashBook> selectAllCashBook();
 
-    void deleteCashBook(String cb_id);
+    CashBook selectByCashBook(int cb_id);
 
-    CashBook selectByCashBook(String cb_id);
+    CashBook selectByRentInfo(int cb_rent_id);
+
+    void deleteCashBook(int cb_id);
 
     void updateCashBook(CashBook cashBook);
 }
