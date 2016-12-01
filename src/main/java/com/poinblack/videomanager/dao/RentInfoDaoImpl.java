@@ -14,7 +14,8 @@ import java.util.List;
 public class RentInfoDaoImpl extends AbstractDao implements RentInfoDao{
 
     public int insertRentInfo(RentInfo rentInfo) {
-        return (int) getSession().save(rentInfo);
+        getSession().save(rentInfo);
+        return rentInfo.getId();
     }
 
     @SuppressWarnings("unchecked")

@@ -81,7 +81,6 @@ public class VideoController {
                               @RequestParam String userId ,
                               @RequestParam String rentInfoId ,
                               Model model) {
-        System.out.println(videoId + " , " + userId + " , "+ rentInfoId);
         //view 꾸미기용 map
         Map<String ,Object> map = new HashedMap();
 
