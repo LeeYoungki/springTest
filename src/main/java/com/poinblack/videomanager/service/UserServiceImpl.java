@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -34,12 +33,12 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
-    public void deleteByUserId(String user_id) {
-        dao.deleteUser(user_id);
+    public void deleteByUserId(int userId) {
+        dao.deleteUser(userId);
     }
 
-    public User selectByUserId(String user_id) {
-        return dao.selectByUser(user_id);
+    public User selectByUserId(int userId) {
+        return dao.selectByUser(userId);
     }
 
     public void updateUser(User user) {
@@ -50,8 +49,8 @@ public class UserServiceImpl implements UserService {
 
         @Override
         public int compare(User arg0, User arg1) {
-            int value1 = arg0.getRent_fee() + arg0.getLate_fee();
-            int value2 = arg1.getRent_fee() + arg1.getLate_fee();
+            int value1 = arg0.getRentFee() + arg0.getLateFee();
+            int value2 = arg1.getRentFee() + arg1.getLateFee();
 
             return value1 > value2 ? -1 : value1 < value2 ? 1:0;
         }

@@ -23,12 +23,12 @@ public class RentInfoServiceImpl implements RentInfoService{
         return rentInfoDao.selectAllRentInfo();
     }
 
-    public RentInfo selectByRentInfo(int rental_id) {
-        return rentInfoDao.selectByRentInfo(rental_id);
+    public RentInfo selectByRentInfo(int rentInfoId) {
+        return rentInfoDao.selectByRentInfo(rentInfoId);
     }
 
-    public void deleteByRentInfo(int rental_id) {
-        rentInfoDao.deleteRentInfo(rental_id);
+    public void deleteByRentInfo(int rentInfoId) {
+        rentInfoDao.deleteRentInfo(rentInfoId);
     }
 
     public void updateRentInfo(RentInfo rentInfo) {

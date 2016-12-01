@@ -23,12 +23,12 @@ public class CashBookServiceImpl implements CashBookService {
         return dao.selectAllCashBook();
     }
 
-    public void deleteByCashBookId(int cb_id) {
-        dao.deleteCashBook(cb_id);
+    public void deleteByCashBookId(int id) {
+        dao.deleteCashBook(id);
     }
 
-    public CashBook selectByCashBookId(int cb_id) {
-        return dao.selectByCashBook(cb_id);
+    public CashBook selectByCashBookId(int id) {
+        return dao.selectByCashBook(id);
     }
 
     public void updateCashBook(CashBook cashBook) {

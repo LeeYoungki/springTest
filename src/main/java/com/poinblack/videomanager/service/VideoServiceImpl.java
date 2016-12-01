@@ -14,7 +14,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -39,8 +38,8 @@ public class VideoServiceImpl implements VideoService {
     Environment env;
 
     public void insertVideo(Video video) {
-        video.setRent_fee(Integer.parseInt(env.getProperty("rentInfo."+video.getType()+"_fee")));
-        video.setLate_fee(Integer.parseInt(env.getProperty("lateInfo."+video.getType()+"_fee")));
+        video.setRentFee(Integer.parseInt(env.getProperty("rentInfo."+video.getType()+"_fee")));
+        video.setLateFee(Integer.parseInt(env.getProperty("lateInfo."+video.getType()+"_fee")));
         video.setState(env.getProperty("state.idle"));
 
         videoDao.insertVideo(video);
@@ -56,20 +55,20 @@ public class VideoServiceImpl implements VideoService {
         return videos;
     }
 
-    public void deleteByVideoId(int video_id) {
-        videoDao.deleteVideo(video_id);
+    public void deleteByVideoId(int videoId) {
+        videoDao.deleteVideo(videoId);
     }
 
-    public Video selectByVideoId(int video_id) {
-        return videoDao.selectByVideo(video_id);
+    public Video selectByVideoId(int videoId) {
+        return videoDao.selectByVideo(videoId);
     }
 
     public void updateVideo(Video video) {
         videoDao.updateVideo(video);
     }
 
-    public Map<String, Object> rentVideo(int video_id, String user_id) {
-        Video video = videoDao.selectByVideo(video_id);
+    public Map<String, Object> rentVideo(int videoId, int userId) {
+        Video video = videoDao.selectByVideo(videoId);
 
         if(isRentState(video)){
             return returnMessage(video);
@@ -78,19 +77,19 @@ public class VideoServiceImpl implements VideoService {
 
         videoDao.updateVideo(video);
 
-        return saveRentInfo(user_id,video.getVideo_id());
+        return saveRentInfo(userId,video.getId());
     }
 
-    public Map<String, Object> returnVideo(int video_id, String user_id,int rentInfo_id) {
-        Video video = videoDao.selectByVideo(video_id);
-        RentInfo rentInfo = rentInfoDao.selectByRentInfo(rentInfo_id);
+    public Map<String, Object> returnVideo(int videoId, int userId, int rentInfoId) {
+        Video video = videoDao.selectByVideo(videoId);
+        RentInfo rentInfo = rentInfoDao.selectByRentInfo(rentInfoId);
 
         rentInfo.setState(env.getProperty("state.idle"));
         video.setState(env.getProperty("state.idle"));
 
         rentInfoDao.updateRentInfo(rentInfo);
         videoDao.updateVideo(video);
-        return saveCashBook(user_id,video_id,rentInfo_id);
+        return saveCashBook(userId, videoId, rentInfoId);
     }
 
     private boolean isRentState(Video video){
@@ -106,83 +105,82 @@ public class VideoServiceImpl implements VideoService {
         return map;
     }
 
-    private Map<String,Object> saveRentInfo(String user_id , int video_id){
+    private Map<String,Object> saveRentInfo(int userId, int videoId){
         Map<String,Object> map = new HashMap<>();
-        RentInfo rentInfo = buildRentInfo(user_id,video_id);
+        RentInfo rentInfo = buildRentInfo(userId, videoId);
 
         int rentInfo_id = rentInfoDao.insertRentInfo(rentInfo);
-        saveCashBook(user_id , video_id , rentInfo_id);
+        saveCashBook(userId, videoId, rentInfo_id);
 
         //view 꾸미기용
-        map.put("userName" , rentInfo.getUser().getUser_id());
+        map.put("userName" , rentInfo.getUser().getUserId());
         map.put("fee" , rentInfo.getFee());
 
         //Todo hibernate 활용방법 구현 시 삭제
-        User user = userDao.selectByUser(user_id);
+        User user = userDao.selectByUser(userId);
         user.addRentFee(rentInfo.getFee());
         userDao.updateUser(user);
 
         return map;
     }
 
-    private Map<String,Object> saveCashBook(String user_id, int video_id,int rentInfo_id){
+    private Map<String,Object> saveCashBook(int userId, int videoId, int rentInfoId){
 
-        CashBook cashBook = cashBookDao.selectByRentInfo(rentInfo_id);
+        CashBook cashBook = cashBookDao.selectByRentInfo(rentInfoId);
 
         if(cashBook == null){
             System.out.println("buildCashBook");
-            cashBook = buildCashBook(user_id,video_id,rentInfo_id);
+            cashBook = buildCashBook(userId, videoId, rentInfoId);
             cashBookDao.insertCashBook(cashBook);
         }
         else{
-            cashBook.setLate_fee(lateFeeCal(cashBook.getRentInfo() , cashBook.getVideo()));
+            cashBook.setLateFee(lateFeeCal(cashBook.getRentInfo() , cashBook.getVideo()));
             cashBookDao.updateCashBook(cashBook);
         }
 
-
         //view 꾸미기용
         Map<String,Object> map = new HashMap<>();
-        map.put("userName" , cashBook.getUser().getUser_id());
-        map.put("fee" , cashBook.getLate_fee());
+        map.put("userName" , cashBook.getUser().getUserId());
+        map.put("fee" , cashBook.getLateFee());
 
         //Todo hibernate 활용방법 구현 시 삭제
-        User user = userDao.selectByUser(user_id);
-        user.addLateFee(cashBook.getLate_fee());
+        User user = userDao.selectByUser(userId);
+        user.addLateFee(cashBook.getLateFee());
         userDao.updateUser(user);
 
         return map;
     }
 
-    private RentInfo buildRentInfo(String user_id, int video_id){
+    private RentInfo buildRentInfo(int userId, int videoId){
         RentInfo rentInfo = new RentInfo();
 
-        Video video = videoDao.selectByVideo(video_id);
-        User user = userDao.selectByUser(user_id);
+        Video video = videoDao.selectByVideo(videoId);
+        User user = userDao.selectByUser(userId);
 
         rentInfo.setVideo(video);
         rentInfo.setUser(user);
-        rentInfo.setFee(video.getRent_fee());
-        rentInfo.setRent_date(new Date());
+        rentInfo.setFee(video.getRentFee());
+        rentInfo.setRentDate(new Date());
         rentInfo.setState(video.getState());
 
         return rentInfo;
     }
 
-    private CashBook buildCashBook(String user_id, int video_id, int rentInfo_id){
+    private CashBook buildCashBook(int userId, int videoId, int rentInfoId){
         CashBook cashBook = new CashBook();
 
-        Video video = videoDao.selectByVideo(video_id);
-        User user = userDao.selectByUser(user_id);
-        RentInfo rentInfo = rentInfoDao.selectByRentInfo(rentInfo_id);
+        Video video = videoDao.selectByVideo(videoId);
+        User user = userDao.selectByUser(userId);
+        RentInfo rentInfo = rentInfoDao.selectByRentInfo(rentInfoId);
 
         int lateFee = lateFeeCal(rentInfo,video);
 
         cashBook.setUser(user);
         cashBook.setVideo(video);
         cashBook.setRentInfo(rentInfo);
-        cashBook.setRent_fee(video.getRent_fee());
-        cashBook.setLate_fee(lateFee);
-        cashBook.setTotal(video.getRent_fee() + lateFee);
+        cashBook.setRentFee(video.getRentFee());
+        cashBook.setLateFee(lateFee);
+        cashBook.setTotal(video.getRentFee() + lateFee);
 
         return cashBook;
     }
@@ -190,11 +188,10 @@ public class VideoServiceImpl implements VideoService {
     private int lateFeeCal(RentInfo rentInfo , Video video){
         //Todo hibernate 활용방법 구현 시 변경
         int lateDate = (int) doDiffOfDate(rentInfo);
-
         int lateFee = 0;
 
-        if(lateDate > late_standard){
-            lateFee = video.getLate_fee()*(lateDate-late_standard);
+        if(lateDate > LATE_STANDARD){
+            lateFee = video.getLateFee()*(lateDate-LATE_STANDARD);
         }
         return lateFee;
     }
@@ -202,7 +199,7 @@ public class VideoServiceImpl implements VideoService {
     public long doDiffOfDate(RentInfo rentInfo){
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            Date beginDate =rentInfo.getRent_date();
+            Date beginDate =rentInfo.getRentDate();
             Date endDate = new Date();
 
             // 시간차이를 시간,분,초를 곱한 값으로 나누면 하루 단위가 나옴

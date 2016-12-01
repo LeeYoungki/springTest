@@ -11,9 +11,9 @@ public interface UserService {
 
     List<User> selectAllSortingUser();
 
-    void deleteByUserId(String user_id);
+    void deleteByUserId(int userId);
 
-    User selectByUserId(String user_id);
+    User selectByUserId(int userId);
 
     void updateUser(User user);
 }

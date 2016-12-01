@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface VideoService {
-    int late_standard = 1;
+    int LATE_STANDARD = 1;
 
     void insertVideo(Video video);
 
@@ -14,13 +14,13 @@ public interface VideoService {
 
     List<Video> selectRentVideo();
 
-    void deleteByVideoId(int video_id);
+    void deleteByVideoId(int videoId);
 
-    Video selectByVideoId(int video_id);
+    Video selectByVideoId(int videoId);
 
     void updateVideo(Video video);
 
-    Map<String,Object> rentVideo(int video_id, String user_id);
+    Map<String,Object> rentVideo(int videoId, int userId);
 
-    Map<String,Object> returnVideo(int video_id, String user_id , int rentInfo_id);
+    Map<String,Object> returnVideo(int videoId, int userId, int rentInfoId);
 }

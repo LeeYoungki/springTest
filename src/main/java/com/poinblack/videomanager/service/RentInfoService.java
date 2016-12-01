@@ -9,9 +9,9 @@ public interface RentInfoService {
 
     List<RentInfo> selectAllRentInfo();
 
-    RentInfo selectByRentInfo(int rental_id);
+    RentInfo selectByRentInfo(int rentInfoId);
 
-    void deleteByRentInfo(int rental_id);
+    void deleteByRentInfo(int rentInfoId);
 
     void updateRentInfo(RentInfo rentInfo);
 }
