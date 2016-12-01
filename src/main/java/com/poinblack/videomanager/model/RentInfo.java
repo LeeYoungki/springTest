@@ -12,17 +12,12 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-@Table(name = "rent_info" , uniqueConstraints = @UniqueConstraint(columnNames = "rental_id"))
+@Table(name = "rentinfo" , uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 public class RentInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "rental_id")
-    private int rental_id;
-
-    @ManyToOne
-    @JoinColumn(name = "rent_video_id" )
-    private Video video;
+    @Column(name = "id")
+    private int id;
 
     @Column(nullable = false)
     private String state;
@@ -31,9 +26,13 @@ public class RentInfo {
     private int fee;
 
     @Column(nullable = false)
-    private Date rent_date;
+    private Date rentDate;
 
     @ManyToOne
-    @JoinColumn(name = "rent_user_id")
+    @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "video_id")
+    private Video video;
 }

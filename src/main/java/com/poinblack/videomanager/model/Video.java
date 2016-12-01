@@ -12,12 +12,12 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Table(name = "video" , uniqueConstraints = @UniqueConstraint(columnNames = "video_id"))
+@Table(name = "video" , uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 public class Video {
 
     @Id
-    @Column(name = "video_id")
-    private int video_id;
+    @Column(name = "id")
+    private int id;
 
     @Column(nullable = false)
     private String vid;
@@ -29,10 +29,10 @@ public class Video {
     private String title;
 
     @Column(nullable = false)
-    private int rent_fee;
+    private int rentFee;
 
     @Column(nullable = false)
-    private int late_fee;
+    private int lateFee;
 
     @Column(nullable = false)
     private String state;

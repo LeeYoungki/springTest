@@ -10,12 +10,15 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-@Table(name = "user" , uniqueConstraints = @UniqueConstraint(columnNames = "user_id"))
+@Table(name = "user" , uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 public class User {
 
     @Id
-    @Column(name = "user_id")
-    private String user_id;
+    @Column(name = "id")
+    private int id;
+
+    @Column(nullable = false)
+    private String userId;
 
     @Column(nullable = false)
     private String name;
@@ -25,17 +28,17 @@ public class User {
 
     //Todo hibernate 활용방법 구현 시 삭제(아래 전부)
     @Column
-    private int rent_fee;
+    private int rentFee;
 
     @Column
-    private int late_fee;
+    private int lateFee;
 
-    public void addRentFee(int rent_fee){
-        this.rent_fee += rent_fee;
+    public void addRentFee(int rentFee){
+        this.rentFee += rentFee;
     }
 
-    public void addLateFee(int late_fee){
-        this.late_fee += late_fee;
+    public void addLateFee(int lateFee){
+        this.lateFee += lateFee;
     }
 
 }

@@ -11,31 +11,30 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-@Table(name = "cashbook" , uniqueConstraints = @UniqueConstraint(columnNames = "cb_id"))
+@Table(name = "cashbook" , uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 public class CashBook {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cb_id")
-    private int cb_id;
+    @Column(name = "id")
+    private int id;
 
     @ManyToOne
-    @JoinColumn(name = "cb_user_id" )
+    @JoinColumn(name = "cb_user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "cb_video_id" )
+    @JoinColumn(name = "cb_video_id")
     private Video video;
 
     @OneToOne
-    @JoinColumn(name = "cb_rent_id")
+    @JoinColumn(name = "cb_rentinfo_id")
     private RentInfo rentInfo;
 
     @Column(nullable = false)
-    private int rent_fee;
+    private int rentFee;
 
     @Column(nullable = false)
-    private int late_fee;
+    private int lateFee;
 
     @Column(nullable = false)
     private int total;
