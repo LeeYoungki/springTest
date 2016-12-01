@@ -31,7 +31,7 @@ public class UserController {
     @RequestMapping(value = "join")
     public String join(@RequestParam Map<String , Object> map) {
         User user = new User();
-        user.setUser_id((String) map.get("user_id"));
+        user.setUserId((String) map.get("userId"));
         user.setName((String) map.get("name"));
         user.setPhone((String) map.get("phone"));
 

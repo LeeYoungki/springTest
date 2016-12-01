@@ -44,22 +44,22 @@ public class VideoController {
     }
 
     @RequestMapping(value = "videoList")
-    public String videoList(@RequestParam String user_id,Model model) {
+    public String videoList(@RequestParam String userId,Model model) {
         List<Video> videos = videoService.selectAllVideo();
         model.addAttribute("videos" , videos);
-        model.addAttribute("user_id" , user_id);
+        model.addAttribute("userId" , userId);
 
         return "videoList";
     }
 
     @RequestMapping(value = "rentVideo")
-    public String rentVideo(@RequestParam String video_id ,
-                            @RequestParam String user_id ,
+    public String rentVideo(@RequestParam String videoId ,
+                            @RequestParam String userId ,
                             Model model) {
 
         //view 꾸미기용 map
         Map<String ,Object> map = new HashedMap();
-        map = videoService.rentVideo(Integer.parseInt(video_id), user_id);
+        map = videoService.rentVideo(Integer.parseInt(videoId), Integer.parseInt(userId));
 
         model.addAttribute("userName" , map.get("userName"));
         model.addAttribute("fee" , map.get("fee"));
@@ -77,15 +77,16 @@ public class VideoController {
     }
 
     @RequestMapping(value = "returnVideo")
-    public String returnVideo(@RequestParam String video_id ,
-                              @RequestParam String user_id ,
-                              @RequestParam String rentInfo_id ,
+    public String returnVideo(@RequestParam String videoId ,
+                              @RequestParam String userId ,
+                              @RequestParam String rentInfoId ,
                               Model model) {
-        System.out.println(video_id + " , " + user_id + " , "+ rentInfo_id);
+        System.out.println(videoId + " , " + userId + " , "+ rentInfoId);
         //view 꾸미기용 map
         Map<String ,Object> map = new HashedMap();
 
-        map = videoService.returnVideo(Integer.parseInt(video_id), user_id , Integer.parseInt(rentInfo_id));
+        //Todo 각 서비스로 분할
+        map = videoService.returnVideo(Integer.parseInt(videoId), Integer.parseInt(userId), Integer.parseInt(rentInfoId));
 
         model.addAttribute("userName" , map.get("userName"));
         model.addAttribute("fee" , map.get("fee"));
