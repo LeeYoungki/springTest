@@ -18,10 +18,10 @@
     </tr>
     <c:forEach var="user" items="${users }">
         <tr>
-            <td>${user.user_id }</td>
+            <td>${user.userId }</td>
             <td>${user.name }</td>
             <td>${user.phone }</td>
-            <td>${user.late_fee }</td>
+            <td>${user.lateFee }</td>
         </tr>
     </c:forEach>
     <tr>

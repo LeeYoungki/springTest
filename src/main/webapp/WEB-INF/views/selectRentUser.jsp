@@ -17,10 +17,10 @@
     </tr>
     <c:forEach var="user" items="${users }">
         <tr>
-            <td>${user.user_id }</td>
+            <td>${user.userId }</td>
             <td>${user.name }</td>
             <td>${user.phone }</td>
-            <td><input type="radio" name="user_id" value="${user.user_id}"></td>
+            <td><input type="radio" name="userId" value="${user.id}"></td>
         </tr>
     </c:forEach>
     <tr>

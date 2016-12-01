@@ -12,7 +12,7 @@
         <tr>
             <th>아이디</th>
             <td>
-                <input type="text" name="user_id" required="required">
+                <input type="text" name="userId" required="required">
             </td>
         </tr>
         <tr>

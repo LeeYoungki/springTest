@@ -23,14 +23,14 @@
                 <td>${video.vid }</td>
                 <td>${video.title }</td>
                 <td>${video.type }</td>
-                <td>${video.rent_fee }</td>
-                <td>${video.late_fee }</td>
+                <td>${video.rentFee }</td>
+                <td>${video.lateFee }</td>
                 <td>${video.state }</td>
-                <td><input type="radio" name="video_id" value="${video.video_id}"></td>
+                <td><input type="radio" name="videoId" value="${video.id}"></td>
             </tr>
         </c:forEach>
         <tr>
-            <input type="hidden" name="user_id" value="${user_id}">
+            <input type="hidden" name="userId" value="${userId}">
             <td colspan="2"><input type="submit" name="select" value="대여"></td>
         </tr>
 

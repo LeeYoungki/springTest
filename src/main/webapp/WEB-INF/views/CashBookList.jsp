@@ -20,11 +20,10 @@
     </tr>
     <c:forEach var="cashBook" items="${cashBooks }">
         <tr>
-            <td>${cashBook.cb_id }</td>
             <td>${cashBook.user.name}</td>
             <td>${cashBook.video.title }</td>
-            <td>${cashBook.rent_fee }</td>
-            <td>${cashBook.late_fee }</td>
+            <td>${cashBook.rentFee }</td>
+            <td>${cashBook.lateFee }</td>
             <td>${cashBook.total }</td>
         </tr>
     </c:forEach>
