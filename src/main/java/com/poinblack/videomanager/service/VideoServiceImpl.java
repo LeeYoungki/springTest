@@ -4,6 +4,7 @@ import com.poinblack.videomanager.dao.CashBookDao;
 import com.poinblack.videomanager.dao.RentInfoDao;
 import com.poinblack.videomanager.dao.UserDao;
 import com.poinblack.videomanager.dao.VideoDao;
+import com.poinblack.videomanager.meta.RentState;
 import com.poinblack.videomanager.model.CashBook;
 import com.poinblack.videomanager.model.RentInfo;
 import com.poinblack.videomanager.model.User;
@@ -36,11 +37,13 @@ public class VideoServiceImpl implements VideoService {
 
     @Autowired
     Environment env;
+    
+    
 
     public void insertVideo(Video video) {
         video.setRentFee(Integer.parseInt(env.getProperty("rentInfo."+video.getType()+"_fee")));
         video.setLateFee(Integer.parseInt(env.getProperty("lateInfo."+video.getType()+"_fee")));
-        video.setState(env.getProperty("state.idle"));
+        video.setState(String.valueOf(RentState.IDEL));
 
         videoDao.insertVideo(video);
     }
@@ -50,7 +53,7 @@ public class VideoServiceImpl implements VideoService {
     }
 
     public List<Video> selectRentVideo() {
-        List<Video> videos = videoDao.selectRentVideo(env.getProperty("state.rent"));
+        List<Video> videos = videoDao.selectRentVideo(String.valueOf(RentState.RENT));
 
         return videos;
     }
@@ -73,7 +76,7 @@ public class VideoServiceImpl implements VideoService {
         if(isRentState(video)){
             return returnMessage(video);
     }
-        video.setState(env.getProperty("state.rent"));
+        video.setState(String.valueOf(RentState.RENT));
 
         videoDao.updateVideo(video);
 
@@ -84,8 +87,8 @@ public class VideoServiceImpl implements VideoService {
         Video video = videoDao.selectByVideo(videoId);
         RentInfo rentInfo = rentInfoDao.selectByRentInfo(rentInfoId);
 
-        rentInfo.setState(env.getProperty("state.idle"));
-        video.setState(env.getProperty("state.idle"));
+        rentInfo.setState(String.valueOf(RentState.IDEL));
+        video.setState(String.valueOf(RentState.IDEL));
 
         rentInfoDao.updateRentInfo(rentInfo);
         videoDao.updateVideo(video);
@@ -93,7 +96,7 @@ public class VideoServiceImpl implements VideoService {
     }
 
     private boolean isRentState(Video video){
-        if(video.getState().equals(env.getProperty("state.rent"))){
+        if(video.getState().equals(RentState.RENT)){
             return true;
         }
         return false;
@@ -129,7 +132,6 @@ public class VideoServiceImpl implements VideoService {
         CashBook cashBook = cashBookDao.selectByRentInfo(rentInfoId);
 
         if(cashBook == null){
-            System.out.println("buildCashBook");
             cashBook = buildCashBook(userId, videoId, rentInfoId);
             cashBookDao.insertCashBook(cashBook);
         }
@@ -205,8 +207,6 @@ public class VideoServiceImpl implements VideoService {
             // 시간차이를 시간,분,초를 곱한 값으로 나누면 하루 단위가 나옴
             long diff = endDate.getTime() - beginDate.getTime();
             long diffDays = diff / (24 * 60 * 60 * 1000);
-
-            System.out.println("diffDays : "+diffDays);
 
             return diffDays;
 
