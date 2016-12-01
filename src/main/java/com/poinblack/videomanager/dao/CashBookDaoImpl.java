@@ -21,21 +21,21 @@ public class CashBookDaoImpl extends AbstractDao implements CashBookDao{
         return criteria.list();
     }
 
-    public void deleteCashBook(int cb_id) {
-        Query query = getSession().createQuery("delete CashBook where cb_id = :cb_id");
-        query.setParameter("cb_id", cb_id);
+    public void deleteCashBook(int id) {
+        Query query = getSession().createQuery("delete CashBook where id = :id");
+        query.setParameter("id", id);
         query.executeUpdate();
     }
 
-    public CashBook selectByCashBook(int cb_id){
+    public CashBook selectByCashBook(int id){
         Criteria criteria = getSession().createCriteria(CashBook.class);
-        criteria.add(Restrictions.eq("cb_id",cb_id));
+        criteria.add(Restrictions.eq("id", id));
         return (CashBook) criteria.uniqueResult();
     }
 
-    public CashBook selectByRentInfo(int cb_rent_id) {
+    public CashBook selectByRentInfo(int rentId) {
         Criteria criteria = getSession().createCriteria(CashBook.class);
-        criteria.add(Restrictions.eq("rentInfo.rental_id",cb_rent_id));
+        criteria.add(Restrictions.eq("rentInfo.id", rentId));
         return (CashBook) criteria.uniqueResult();
     }
 

@@ -30,15 +30,15 @@ public class VideoDaoImpl extends AbstractDao implements VideoDao{
         return criteria.list();
     }
 
-    public void deleteVideo(int video_id) {
-        Query query = getSession().createQuery("delete Video where video_id = :video_id");
-        query.setParameter("video_id", video_id);
+    public void deleteVideo(int id) {
+        Query query = getSession().createQuery("delete Video where id = :id");
+        query.setParameter("id", id);
         query.executeUpdate();
     }
 
-    public Video selectByVideo(int video_id){
+    public Video selectByVideo(int id){
         Criteria criteria = getSession().createCriteria(Video.class);
-        criteria.add(Restrictions.eq("video_id",video_id));
+        criteria.add(Restrictions.eq("id", id));
         return (Video) criteria.uniqueResult();
     }
 

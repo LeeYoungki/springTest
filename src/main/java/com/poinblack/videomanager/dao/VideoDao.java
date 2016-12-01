@@ -11,9 +11,9 @@ public interface VideoDao {
 
     List<Video> selectRentVideo(String state);
 
-    void deleteVideo(int video_id);
+    void deleteVideo(int id);
 
-    Video selectByVideo(int video_id);
+    Video selectByVideo(int id);
 
     void updateVideo(Video video);
 }

@@ -21,15 +21,15 @@ public class UserDaoImpl extends AbstractDao implements UserDao{
         return criteria.list();
     }
 
-    public void deleteUser(String user_id) {
-        Query query = getSession().createQuery("delete User where user_id = :user_id");
-        query.setParameter("user_id", user_id);
+    public void deleteUser(int id) {
+        Query query = getSession().createQuery("delete User where id = :id");
+        query.setParameter("id", id);
         query.executeUpdate();
     }
 
-    public User selectByUser(String user_id){
+    public User selectByUser(int id){
         Criteria criteria = getSession().createCriteria(User.class);
-        criteria.add(Restrictions.eq("user_id",user_id));
+        criteria.add(Restrictions.eq("id", id));
         return (User) criteria.uniqueResult();
     }
 

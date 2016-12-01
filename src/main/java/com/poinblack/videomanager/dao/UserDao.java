@@ -9,9 +9,9 @@ public interface UserDao {
 
     List<User> selectAllUser();
 
-    void deleteUser(String user_id);
+    void deleteUser(int id);
 
-    User selectByUser(String user_id);
+    User selectByUser(int id);
 
     void updateUser(User user);
 }

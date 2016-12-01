@@ -10,11 +10,9 @@ public interface RentInfoDao {
 
     List<RentInfo> selectAllRentInfo();
 
-    void sumByUserLateFee(String user_id);
+    void deleteRentInfo(int id);
 
-    void deleteRentInfo(int rental_id);
-
-    RentInfo selectByRentInfo(int rental_id);
+    RentInfo selectByRentInfo(int id);
 
     void updateRentInfo(RentInfo rentInfo);
 

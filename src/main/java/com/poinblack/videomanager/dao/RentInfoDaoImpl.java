@@ -23,22 +23,15 @@ public class RentInfoDaoImpl extends AbstractDao implements RentInfoDao{
         return criteria.list();
     }
 
-    public void sumByUserLateFee(String user_id) {
-        Criteria criteria = getSession().createCriteria(RentInfo.class);
-        criteria.setProjection(Projections.sum("fee"));
-        criteria.add(Restrictions.eq("rent_user_id" , user_id));
-        //Todo hibernate 활용 sum 구현
-    }
-
-    public void deleteRentInfo(int rental_id) {
-        Query query = getSession().createQuery("delete RentInfo where rental_id = :rental_id");
-        query.setParameter("rental_id", rental_id);
+    public void deleteRentInfo(int id) {
+        Query query = getSession().createQuery("delete RentInfo where id = :id");
+        query.setParameter("id", id);
         query.executeUpdate();
     }
 
-    public RentInfo selectByRentInfo(int rental_id) {
+    public RentInfo selectByRentInfo(int id) {
         Criteria criteria = getSession().createCriteria(RentInfo.class);
-        criteria.add(Restrictions.eq("rental_id",rental_id));
+        criteria.add(Restrictions.eq("id", id));
         return (RentInfo) criteria.uniqueResult();
     }
 
